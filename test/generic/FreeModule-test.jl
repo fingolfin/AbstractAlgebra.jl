@@ -2,8 +2,8 @@
    R, x = polynomial_ring(ZZ, "x")
    M = FreeModule(R, 5)
 
-   @test FreeModule(R, 5, cached = true) === FreeModule(R, 5, cached = true)
-   @test FreeModule(R, 5, cached = true) !== FreeModule(R, 5, cached = false)
+   @test M === FreeModule(R, 5, cached = true)
+   @test M === FreeModule(R, 5, cached = false)
 
    @test isa(M, Generic.FreeModule)
 

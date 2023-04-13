@@ -1278,27 +1278,31 @@ end
 #
 ###############################################################################
 
-@attributes mutable struct FreeModule{T <: Union{RingElement, NCRingElem}} <: AbstractAlgebra.FPModule{T}
-   rank::Int
+struct FreeModule{T <: Union{RingElement, NCRingElem}} <: AbstractAlgebra.FPModule{T}
    base_ring::NCRing
+   rank::Int
 
    function FreeModule{T}(R::NCRing, rank::Int, cached::Bool = true) where T <: Union{RingElement, NCRingElem}
-      return get_cached!(FreeModuleDict, (R, rank), cached) do
-         new{T}(rank, R)
-      end::FreeModule{T}
+      # TODO/FIXME: `cached` is ignored and only exists for backwards compatibility
+      new{T}(R, rank)
    end
 end
-
-const FreeModuleDict = CacheDictType{Tuple{NCRing, Int}, FreeModule}()
 
 struct FreeModuleElem{T <: Union{RingElement, NCRingElem}} <: AbstractAlgebra.FPModuleElem{T}
    parent::FreeModule{T}
    v::MatElem{T}
 
    function FreeModuleElem{T}(m::FreeModule{T}, v::MatElem{T}) where T <: Union{RingElement, NCRingElem}
+      @assert rank(m) == ncols(v)
+      #@assert all(x -> base_ring(m) == parent(x), v)
       new{T}(m, v)
    end
+
+   function FreeModuleElem(v::MatElem{T}) where T <: Union{RingElement, NCRingElem}
+      new{T}(v)
+   end
 end
+
 
 ###############################################################################
 #

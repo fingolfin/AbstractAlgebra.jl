@@ -66,8 +66,8 @@ Base.hash(a::FreeModuleElem, h::UInt) = hash(a.v, h)
 ###############################################################################
 
 function show(io::IO, M::FreeModule{T}) where T <: Union{RingElement, NCRingElem}
-   AbstractAlgebra.@show_name(io, M)
-   AbstractAlgebra.@show_special(io, M)
+#   AbstractAlgebra.@show_name(io, M)
+#   AbstractAlgebra.@show_special(io, M)
 
    print(io, "Free module of rank ")
    print(io, rank(M))
@@ -76,8 +76,8 @@ function show(io::IO, M::FreeModule{T}) where T <: Union{RingElement, NCRingElem
 end
 
 function show(io::IO, M::FreeModule{T}) where T <: FieldElement
-   AbstractAlgebra.@show_name(io, M)
-   AbstractAlgebra.@show_special(io, M)
+#   AbstractAlgebra.@show_name(io, M)
+#   AbstractAlgebra.@show_special(io, M)
 
    print(io, "Vector space of dimension ")
    print(io, dim(M))
@@ -127,6 +127,9 @@ function (M::FreeModule{T})(a::Vector{S}) where {T <: Union{RingElement, NCRingE
    z = FreeModuleElem{T}(M, v)
    return z
 end
+
+# TODO: get rid of the need to store FreeModule inside FreeModuleElem
+# and simplify the code and below here
 
 function (M::FreeModule{T})(a::Vector{Any}) where T <: Union{RingElement, NCRingElem}
    length(a) != 0 && error("Incompatible element")
